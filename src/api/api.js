@@ -1,31 +1,37 @@
 const controller_object = {};
-const connection = require('../config/config');
-const { google } = require('googleapis');
+const fs = require('fs');
+const pdfParser = require('pdf2json')
 
 controller_object.contoh_fungsi = async(req, res, next) => {
-    const keyFile = 'src/credentials.json';
-    const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+    string1="string1";
+    string2="string2 is here";
+        changepercent(string1,string2);
+    }
     
-    const auth = new google.auth.GoogleAuth({
-        keyFile: keyFile,
-        scopes: SCOPES,
-    });
-
-    const client = await auth.getClient();
-
-    const googlesheets = google.sheets({version: 'v4', auth: client});
-
-    const spreadsheetId = "1S3VnEXOMvWVkY7ZCcesUyWrErwGMQaQCEVljVprvAoY";
-
-    const getRows = await googlesheets.spreadsheets.values.get({
-        auth,
-        spreadsheetId,
-        range: "Sheet1",
-    })
+    function changepercent(string1,string2) {
     
-    res.status(200).json({
-        data: getRows.data,
-    })
+        var s1Parts= string1.split(' ');
+        var s2Parts= string2.split(' ');
+    
+        var matched = 0;
+    
+    for(var i = 0; i<s1Parts.length; i++)
+    {
+        for(var j = 0; j<s2Parts.length; j++)
+            {
+            if(s1Parts[i] === s2Parts[j])
+                matched++;   
+            }
+    
+    }
+        var percentage=(matched/Math.max(s1Parts.length, s2Parts.length))*100;
+    
+        console.log(matched);
+        console.log(percentage);
+    if(percentage<50)
+    {
+        console.log("Change Above 50%");
+    }
 };
 
 module.exports = controller_object;

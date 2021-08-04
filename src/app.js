@@ -1,7 +1,7 @@
 const express = require('express');
-const {google} = require ('googleapis');
+// const {google} = require ('googleapis');
 const cors = require('cors');
-const { pool } = require('./config/config');
+// const { pool } = require('./config/config');
 const routes_api = require('./routes/index');
 const bodyParser = require('body-parser');
 

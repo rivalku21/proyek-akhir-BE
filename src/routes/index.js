@@ -12,11 +12,11 @@ const search = require('../api/search');
 router.get('/', api.contoh_fungsi);
 router.get('/data', data.readData);
 router.get('/data/:id', data.readDataById);
-router.get('/data/:id/:filename', database.download);
 router.post('/uploads', fileUtils.multer.single('file'), uploads.upload);
 router.post('/check', cosineSim.cosineCheck);
 router.post('/save', database.createDatabase);
 router.get('/search', search.search);
 router.get('/lecture', database.lectureList);
+router.get('delete', database.deletefile);
 
 module.exports = router;

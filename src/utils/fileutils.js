@@ -32,11 +32,29 @@ const getPublicIp = () => {
         return `127.0.0.1:${process.env.DB_PORT}`;
     }
     return `127.0.0.1:${process.env.DB_PORT}`;
-}
+};
+
+const get_data = (sheet, tableName) => {
+    var data = { success: false, data: [] };
+    var resultData = get_object_data(sheet);
+  
+    if (resultData.length > 0) {
+      data = {
+        success: true,
+        data: resultData
+      };
+    }
+  
+    var result = JSON.stringify(data);
+    return ContentService.createTextOutput(result).setMimeType(
+      ContentService.MimeType.JSON
+    );
+  }
 
 module.exports = {
     multer: multerUtil,
     file_name,
     deleteFile,
     getPublicIp,
+    get_data,
 };

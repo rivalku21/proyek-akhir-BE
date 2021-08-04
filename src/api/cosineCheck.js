@@ -1,5 +1,5 @@
 const controller_object = {};
-const fs = require('fs');
+const fs = require('fs-extra');
 const PDFparser = require('pdf2json');
 const files = fs.readdirSync("./public/uploads/data");
 const docSimilarity = require('../utils/index');
@@ -22,21 +22,43 @@ controller_object.cosineCheck = async(req, res, next) => {
         }));
 
         var b = `${data}`;
-        // const doc = docSimilarity.documentTokenizer([a, b]).bagOfWords;
+        const doc = docSimilarity.documentTokenizer([a, b]).wordInDocumentOccurence;
+        
+        const docWord = (input) => {
+            const docSimi= [];
+            const objek = Object.entries(input);
+            const arrayFormat = objek.map(entry => Object.assign({'word': entry[0], 'point': entry[1]}));
+            arrayFormat.forEach(function (items) {
+                if (items.point > 1 && items.word.length > 3) {
+                    docSimi.push(items.word);
+                }               
+            })
+            return docSimi;
+        }
 
+        const wordDoc = docWord(doc);
         const result = ((docSimilarity.wordFrequencySim(a, b, docSimilarity.cosineSim)) * 100).toFixed(2);
-        if (result <= 30) {
+
+        const fixed = () => {
+            if (result < 0) {
+                return 0.1;
+            } else {
+                return result;
+            }
+        }
+
+        if (fixed() <= 50) {
             res.status(200).send({
                 filename: filename,
-                result : result,
-                // doc: doc
+                result : fixed(),
+                doc: wordDoc
             })
         } else {
             fs.unlinkSync(`./public/uploads/pdf/${filename}`);
             res.status(200).send({
                 filename: filename,
-                result : result,
-                // doc: doc
+                result : fixed(),
+                doc: wordDoc,
             })
         }
 
