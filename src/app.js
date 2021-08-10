@@ -22,7 +22,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/', routes_api);
+app.use('/api', routes_api);
 
 app.listen(PORT, () => {
     console.log(`listening at ${PORT}`);
