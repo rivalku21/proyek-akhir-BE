@@ -14,7 +14,7 @@ controller_object.cosineCheck = async(req, res, next) => {
             pdfParser.loadPDF(`./public/uploads/data/${file}`);
             let patient = await new Promise(async(resolve, reject) => {
                 pdfParser.on("pdfParser_dataReady", (pdfData) => {
-                    const raw = pdfParser.getRawTextContent().replace(/\r\n/g, " ");
+                    const raw = pdfParser.getRawTextContent().toLowerCase().replace(/\r\n/g, " ").replace(/[^a-z0-9 ]/g,"");
                     resolve (raw);
                 });
             });
@@ -37,33 +37,37 @@ controller_object.cosineCheck = async(req, res, next) => {
         }
 
         const wordDoc = docWord(doc);
-        const result = ((docSimilarity.wordFrequencySim(a, b, docSimilarity.cosineSim)) * 100).toFixed(2);
+        const result = ((docSimilarity.wordFrequencySim(a, b, docSimilarity.cosineSim)) * 100 ).toFixed(2);
 
-        const fixed = () => {
-            if (result < 0) {
-                return 0.1;
-            } else {
-                return result;
-            }
-        }
+        // const fixed = () => {
+        //     if (result < 0) {
+        //         return 0.1;
+        //     } else {
+        //         return result;
+        //     }
+        // }
 
-        if (fixed() <= 50) {
+        if (result <= 60) {
             res.status(200).send({
                 filename: filename,
-                result : fixed(),
+                result : result,
                 doc: wordDoc
             })
         } else {
             fs.unlinkSync(`./public/uploads/pdf/${filename}`);
             res.status(200).send({
                 filename: filename,
-                result : fixed(),
+                result : result,
                 doc: wordDoc,
             })
         }
 
-    } catch {
-        res.status(500)
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({
+            statusCode: '500',
+            error: err
+        })
     }
 };
 

@@ -32,7 +32,7 @@ controller_object.upload = async(req, res, next) => {
             PDFParser.loadPDF(file);
             PDFParser.on("pdfParser_dataError", errData => console.error(errData.parserError) );
             PDFParser.on("pdfParser_dataReady", pdfData => {
-                const raw = PDFParser.getRawTextContent().replace(/\r\n/g, " ");
+                const raw = PDFParser.getRawTextContent().toLowerCase().replace(/\r\n/g, " ").replace(/[^a-z0-9 ]/g,"");
                 res.status(200).json({
                     path: req.file.filename, //path akan digunakan untuk memasukkan data ke database
                     data: raw //data akan dilempar menjadi inputan di /api/check

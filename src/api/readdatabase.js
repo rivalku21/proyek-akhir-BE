@@ -22,7 +22,7 @@ controller_object.readData = async(req, res, next) => {
     const getRows = await googlesheets.spreadsheets.values.get({
         auth,
         spreadsheetId,
-        range: "Sheet1!A2:H",
+        range: "Sheet1!A3:H",
     })
 
     const nameRow = getRows.data.values.map(row => Object.assign({ 
@@ -47,7 +47,7 @@ controller_object.readDataById = async(req, res, next) => {
     const getRows = await googlesheets.spreadsheets.values.get({
         auth,
         spreadsheetId,
-        range: "Sheet1!A2:H",
+        range: "Sheet1!A:H",
     })
 
     const nameRow = getRows.data.values.map(row => Object.assign({ 
