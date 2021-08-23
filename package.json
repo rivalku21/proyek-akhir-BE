@@ -26,6 +26,7 @@
     "mysql": "^2.18.1",
     "pdf-to-text": "0.0.7",
     "pdf2json": "^1.2.1",
+    "sastrawijs": "^1.0.4",
     "stemmer": "^1.0.2",
     "uuid": "^8.3.2"
   },

@@ -9,18 +9,39 @@ controller_object.cosineCheck = async(req, res, next) => {
     const a = `${req.body.file}`;
 
     try {
+        // proses merubah pdf ke dalam bentuk raw
         let data = await Promise.all(files.map(async(file) => {
             let pdfParser = new PDFparser(this, 1);
             pdfParser.loadPDF(`./public/uploads/data/${file}`);
             let patient = await new Promise(async(resolve, reject) => {
                 pdfParser.on("pdfParser_dataReady", (pdfData) => {
-                    const raw = pdfParser.getRawTextContent().toLowerCase().replace(/\r\n/g, " ").replace(/[^a-z0-9 ]/g,"");
+                    const raw = pdfParser.getRawTextContent().toLowerCase().replace(/\r\n/g, "").replace(/[^a-z0-9 ]/g," ");
                     resolve (raw);
                 });
             });
             return patient;
         }));
+        // akhir proses merubah pdf ke dalam bentuk raw
 
+        // SKEMA 2
+        let percentase = [];
+
+        for (let k in data) {
+            const penghitungan = ((docSimilarity.wordFrequencySim(a, data[k], docSimilarity.cosineSim)) * 100 ).toFixed(2);
+            const angka = Number(`${penghitungan}`);
+            percentase.push(angka);
+        }
+
+        const urutdata = percentase.sort((a, b) => {  
+            return b - a
+        });
+
+        const hasil = urutdata[0];
+
+        console.log(urutdata);
+        // akhir SKEMA 2
+        
+        // pencuplikan kata
         var b = `${data}`;
         const doc = docSimilarity.documentTokenizer([a, b]).wordInDocumentOccurence;
         
@@ -37,27 +58,31 @@ controller_object.cosineCheck = async(req, res, next) => {
         }
 
         const wordDoc = docWord(doc);
-        const result = ((docSimilarity.wordFrequencySim(a, b, docSimilarity.cosineSim)) * 100 ).toFixed(2);
+        // akhir pencuplikan kata
 
+        // SKEMA 1
+        // const result = ((docSimilarity.wordFrequencySim(a, b, docSimilarity.cosineSim)) * 100 ).toFixed(2);
+
+        // fiksasi nilai apa bila ada toleransi
         // const fixed = () => {
         //     if (result < 0) {
         //         return 0.1;
         //     } else {
         //         return result;
         //     }
-        // }
 
-        if (result <= 60) {
+
+        if (hasil <= 60) {
             res.status(200).send({
                 filename: filename,
-                result : result,
-                doc: wordDoc
+                result : hasil,
+                doc: wordDoc,
             })
         } else {
             fs.unlinkSync(`./public/uploads/pdf/${filename}`);
             res.status(200).send({
                 filename: filename,
-                result : result,
+                result : hasil,
                 doc: wordDoc,
             })
         }

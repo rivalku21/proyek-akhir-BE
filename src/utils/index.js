@@ -52,7 +52,7 @@ function documentTokenizer(documentList, minLen=1){
     for (let k in documentList){
         let currentBOW = {};
         let currentTotalWord = 0;
-        const words = documentList[k].toLowerCase().replace(/[^a-z0-9 ]/g,"").split(" ");
+        const words = documentList[k].toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ");
         let contentWords = [];
 
         if (words.length>=minLen){//remove short sentences
