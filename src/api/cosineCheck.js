@@ -72,7 +72,7 @@ controller_object.cosineCheck = async(req, res, next) => {
         //     }
 
 
-        if (hasil <= 60) {
+        if (hasil <= 50) {
             res.status(200).send({
                 filename: filename,
                 result : hasil,

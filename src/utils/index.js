@@ -15,27 +15,6 @@ function cosineSim (p, q) {//input word vector (1 = total similarity, 0 = total 
     let diviser = (Math.sqrt(bottomA)*Math.sqrt(bottomB));
     return diviser!=0?(upper/diviser):0;
 }
-  
-function jaccardSim (p, q) {//input word vector (1 = total similarity, 0 = total dissimilarity)
-    let union = 0;
-    let intersection = 0;
-    let len = Math.min(p.length, q.length);
-    for (let i=0;i<len;i++){
-        //for non distinct calculation
-        /*intersection+=Math.min(p[i],q[i]);//p = 1, q = 2 - intersect = 1
-        union+=Math.max(p[i],q[i]);//p = 0, q = 3 - union = 3*/
-
-        //for distinct calculation
-        if (p[i]>0 && q[i]>0){
-            intersection++;
-        }
-        if (p[i]>0 || q[i]>0){
-            union++;
-        }
-        
-    }
-    return union==0?0:(intersection/union);
-};
 
 function documentTokenizer(documentList, minLen=1){
     /**@type{{[k:string]:Number}} */
