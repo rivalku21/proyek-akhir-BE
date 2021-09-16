@@ -94,4 +94,4 @@ function wordFrequencySim (document1, document2, similarityFunc=cosineSimilarity
     return similarityFunc(matrix2d[0], matrix2d[1]);
 }
 
-module.exports = {cosineSim, jaccardSim, documentTokenizer, wordFrequencySim};
+module.exports = {cosineSim, documentTokenizer, wordFrequencySim};

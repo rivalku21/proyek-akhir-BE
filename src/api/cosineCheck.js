@@ -23,24 +23,6 @@ controller_object.cosineCheck = async(req, res, next) => {
         }));
         // akhir proses merubah pdf ke dalam bentuk raw
 
-        // SKEMA 2
-        let percentase = [];
-
-        for (let k in data) {
-            const penghitungan = ((docSimilarity.wordFrequencySim(a, data[k], docSimilarity.cosineSim)) * 100 ).toFixed(2);
-            const angka = Number(`${penghitungan}`);
-            percentase.push(angka);
-        }
-
-        const urutdata = percentase.sort((a, b) => {  
-            return b - a
-        });
-
-        const hasil = urutdata[0];
-
-        console.log(urutdata);
-        // akhir SKEMA 2
-        
         // pencuplikan kata
         var b = `${data}`;
         const doc = docSimilarity.documentTokenizer([a, b]).wordInDocumentOccurence;
@@ -60,8 +42,29 @@ controller_object.cosineCheck = async(req, res, next) => {
         const wordDoc = docWord(doc);
         // akhir pencuplikan kata
 
+        
+        let percentase = [];
+
+        // SKEMA 2
+        for (let k in data) {
+            const penghitungan = ((docSimilarity.wordFrequencySim(a, data[k], docSimilarity.cosineSim)) * 100 ).toFixed(2);
+            const angka = Number(`${penghitungan}`);
+            percentase.push(angka);
+        }
+
+        
         // SKEMA 1
-        // const result = ((docSimilarity.wordFrequencySim(a, b, docSimilarity.cosineSim)) * 100 ).toFixed(2);
+        const result = ((docSimilarity.wordFrequencySim(a, b, docSimilarity.cosineSim)) * 100 ).toFixed(2);
+        percentase.push(Number(result));
+
+        const urutdata = percentase.sort((a, b) => {  
+            return b - a
+        });
+
+        const hasil = urutdata[0];
+
+        console.log(urutdata);
+        
 
         // fiksasi nilai apa bila ada toleransi
         // const fixed = () => {

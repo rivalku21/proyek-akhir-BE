@@ -4,6 +4,7 @@ const cors = require('cors');
 // const { pool } = require('./config/config');
 const routes_api = require('./routes/index');
 const bodyParser = require('body-parser');
+require("dotenv").config({ path: ".env" });
 
 const app = express();
 
